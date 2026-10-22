@@ -1,0 +1,243 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}Inquiries{% endblock %}
+{% block crumb %}Inquiries{% endblock %}
+
+{% block content %}
+<div class="admin-page-header">
+    <div>
+        <h1>Inquiries</h1>
+        <p>Everything the website has collected: contact messages, booking requests, job applications and newsletter subscribers.</p>
+    </div>
+</div>
+
+<div class="admin-tabs">
+    <a href="{{ url_for('admin.inquiries', tab='messages') }}" class="{{ 'active' if tab == 'messages' }}">
+        <i class="fas fa-envelope"></i> Messages <span class="count">{{ messages|length }}</span>
+    </a>
+    <a href="{{ url_for('admin.inquiries', tab='bookings') }}" class="{{ 'active' if tab == 'bookings' }}">
+        <i class="fas fa-calendar-check"></i> Bookings <span class="count">{{ bookings|length }}</span>
+    </a>
+    <a href="{{ url_for('admin.inquiries', tab='applications') }}" class="{{ 'active' if tab == 'applications' }}">
+        <i class="fas fa-file-signature"></i> Applications <span class="count">{{ applications|length }}</span>
+    </a>
+    <a href="{{ url_for('admin.inquiries', tab='subscribers') }}" class="{{ 'active' if tab == 'subscribers' }}">
+        <i class="fas fa-users"></i> Subscribers <span class="count">{{ subscribers|length }}</span>
+    </a>
+</div>
+
+<div class="admin-card">
+    <div class="admin-card-head">
+        {% if tab == 'messages' %}
+        <h2><i class="fas fa-envelope"></i> Contact messages</h2>
+        {% elif tab == 'bookings' %}
+        <h2><i class="fas fa-calendar-check"></i> Booking requests</h2>
+        {% elif tab == 'applications' %}
+        <h2><i class="fas fa-file-signature"></i> Job applications</h2>
+        {% else %}
+        <h2><i class="fas fa-users"></i> Newsletter subscribers</h2>
+        {% endif %}
+        <label class="search">
+            <i class="fas fa-search"></i>
+            <input type="search" id="adminSearch" placeholder="Search...">
+        </label>
+    </div>
+    <div class="admin-card-body flush">
+        <div class="table-wrap">
+            {% if tab == 'messages' %}
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Received</th>
+                        <th>Name</th>
+                        <th>Contact</th>
+                        <th>Subject</th>
+                        <th>Message</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for message in messages %}
+                    <tr class="{{ 'is-read' if message.is_read }}">
+                        <td>{{ message.created_at.strftime('%d %b %Y %H:%M') if message.created_at else '-' }}</td>
+                        <td>
+                            <span class="row-title">{{ message.name }}</span>
+                            {% if not message.is_read %}<span class="badge badge-warning">New</span>{% endif %}<br>
+                            <small>{{ message.travellers ~ ' travellers' if message.travellers else '' }}</small>
+                        </td>
+                        <td>{{ message.email }}<br><small>{{ message.phone or '' }}</small></td>
+                        <td>{{ message.subject }}</td>
+                        <td>{{ message.message }}</td>
+                        <td>
+                            <div class="admin-actions">
+                                <form method="POST" action="{{ url_for('admin.toggle_message_read', id=message.id) }}">
+                                    <button type="submit" class="btn btn-sm">
+                                        <i class="fas fa-envelope{{ '-open' if message.is_read else '' }}"></i>
+                                        {{ 'Unread' if message.is_read else 'Read' }}
+                                    </button>
+                                </form>
+                                <form method="POST" action="{{ url_for('admin.delete_message', id=message.id) }}"
+                                      onsubmit="return confirm('Delete this message?');">
+                                    <button type="submit" class="btn btn-sm btn-danger">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6">
+                            <div class="table-empty">
+                                <i class="fas fa-inbox"></i>
+                                No messages yet.
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {% elif tab == 'bookings' %}
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Received</th>
+                        <th>Trip</th>
+                        <th>Guest</th>
+                        <th>Travel date</th>
+                        <th>Travellers</th>
+                        <th>Payment</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for booking in bookings %}
+                    <tr>
+                        <td>{{ booking.created_at.strftime('%d %b %Y %H:%M') if booking.created_at else '-' }}</td>
+                        <td>
+                            <span class="row-title">{{ booking.item_title or '-' }}</span><br>
+                            <span class="badge badge-muted">{{ booking.item_type or 'trip' }}</span>
+                        </td>
+                        <td>{{ booking.name }}<br><small>{{ booking.email }} {{ booking.phone or '' }}</small></td>
+                        <td>{{ booking.travel_date or '-' }}</td>
+                        <td>{{ booking.travellers or 1 }}</td>
+                        <td>
+                            {% if booking.tx_ref %}
+                            <span class="badge {{ 'badge-success' if booking.is_paid else 'badge-muted' }}">{{ booking.payment_status }}</span><br>
+                            <small>{{ booking.amount }} {{ booking.currency }}<br>{{ booking.tx_ref }}</small>
+                            {% else %}
+                            <span class="badge badge-muted">no payment</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="admin-actions">
+                                {% if booking.message %}
+                                <span class="badge badge-muted" title="{{ booking.message }}">Note</span>
+                                {% endif %}
+                                <form method="POST" action="{{ url_for('admin.delete_booking', id=booking.id) }}"
+                                      onsubmit="return confirm('Delete this booking request?');">
+                                    <button type="submit" class="btn btn-sm btn-danger">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6">
+                            <div class="table-empty">
+                                <i class="fas fa-calendar"></i>
+                                No booking requests yet.
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {% elif tab == 'applications' %}
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Received</th>
+                        <th>Applicant</th>
+                        <th>Role</th>
+                        <th>Note</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for application in applications %}
+                    <tr>
+                        <td>{{ application.created_at.strftime('%d %b %Y %H:%M') if application.created_at else '-' }}</td>
+                        <td>
+                            <span class="row-title">{{ application.name }}</span><br>
+                            <small>{{ application.email }}</small>
+                        </td>
+                        <td>{{ application.job.title if application.job else '-' }}</td>
+                        <td>{{ application.message or '-' }}</td>
+                        <td>
+                            <div class="admin-actions">
+                                <form method="POST" action="{{ url_for('admin.delete_application', id=application.id) }}"
+                                      onsubmit="return confirm('Delete this application?');">
+                                    <button type="submit" class="btn btn-sm btn-danger">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5">
+                            <div class="table-empty">
+                                <i class="fas fa-file-signature"></i>
+                                No job applications yet.
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            {% else %}
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Subscribed</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for subscriber in subscribers %}
+                    <tr>
+                        <td>{{ subscriber.created_at.strftime('%d %b %Y') if subscriber.created_at else '-' }}</td>
+                        <td class="row-title">{{ subscriber.email }}</td>
+                        <td>
+                            {% if subscriber.is_active %}
+                            <span class="badge badge-success">Active</span>
+                            {% else %}
+                            <span class="badge badge-muted">Unsubscribed</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="3">
+                            <div class="table-empty">
+                                <i class="fas fa-users"></i>
+                                No subscribers yet.
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

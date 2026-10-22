@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/index.css') }}">
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-content">
+        <div class="hero-text">
+            <h1>{{ site_settings.get('hero_title', 'Discover Extraordinary Journeys') }}</h1>
+            <p>{{ site_settings.get('hero_subtitle', "Experience breathtaking adventures, discover hidden gems, and create unforgettable memories with our expertly crafted tours.") }}</p>
+            <div class="hero-btns">
+                <a href="{{ url_for('main.destinations') }}" class="btn btn-primary">Explore Destinations</a>
+                <a href="{{ url_for('main.contacts') }}" class="btn btn-outline" style="color: white; border-color: white;">Customize Your Tour</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Destinations -->
+<section class="section">
+    <div class="section-title">
+        <h2>Premium Destinations</h2>
+        <p>Discover our handpicked selection of the world's most breathtaking locations</p>
+    </div>
+
+    <div class="destinations-grid">
+        {% for destination in destinations %}
+        <div class="destination-card animate {{ 'delay-1' if loop.index % 3 == 0 else ('delay-2' if loop.index % 3 == 1 else '') }}" data-id="{{ destination.id }}">
+            <div class="destination-img">
+                <img src="{{ destination.image_url }}" alt="{{ destination.name }}">
+                <div class="destination-tag">{{ destination.tag }}</div>
+            </div>
+            <div class="destination-content">
+                <h3><a href="{{ url_for('main.destination_detail', slug=destination.slug) }}">{{ destination.name }}</a></h3>
+                <p>{{ destination.description }}</p>
+                <div class="destination-meta">
+                    <div class="price">{{ destination.price_display }} <span>/ person</span></div>
+                    <div>
+                        <i class="fas fa-clock"></i> {{ destination.duration }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <p class="section-title">No destinations have been published yet.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Tour Packages -->
+<section class="section packages">
+    <div class="section-title">
+        <h2>Premium Tour Packages</h2>
+        <p>All-inclusive experiences designed for the discerning traveler</p>
+    </div>
+
+    <div class="packages-grid">
+        {% for package in packages %}
+        <div class="package-card animate {{ 'delay-1' if loop.index == 2 else ('delay-2' if loop.index == 3 else '') }}">
+            <div class="package-header">
+                <h3>{{ package.name }}</h3>
+                <div class="package-price">{{ package.price_display }}</div>
+                <div class="package-duration">{{ package.duration }}</div>
+            </div>
+            <div class="package-features">
+                <ul>
+                    {% for feature in package.features %}
+                    <li><i class="fas fa-check"></i> {{ feature }}</li>
+                    {% endfor %}
+                </ul>
+                <a href="{{ url_for('main.package_detail', slug=package.slug) }}" class="btn btn-primary w-100">Book This Package</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- Wildlife Section -->
+<div class="wildlife-section">
+    <div class="section-header">
+        <h2>Wildlife Inspiration</h2>
+        <p>Discover the magnificent creatures that inspire our adventures. Each animal represents the spirit of exploration and the beauty of the natural world we strive to protect through our sustainable tours.</p>
+    </div>
+
+    <div class="wildlife-grid">
+        {% for animal in wildlife %}
+        <div class="wildlife-card">
+            <div class="wildlife-img">
+                <img src="{{ animal.image_url }}" alt="{{ animal.name }}">
+            </div>
+            <div class="wildlife-content">
+                <h3>{{ animal.name }}</h3>
+                <p>{{ animal.description }}</p>
+                <span class="animal-tag">{{ animal.tag }}</span>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Other Services -->
+<div class="other-services-section">
+    <div class="os-container">
+        <div class="os-intro">
+            <span class="os-small‑header">OTHER SERVICES</span>
+            <h2 class="os-title">Your Adventure Begins Here</h2>
+        </div>
+        <div class="os-grid">
+            {% for service in services %}
+            <div class="os-card">
+                <div class="os-icon"><i class="fas {{ service.icon or 'fa-compass' }}"></i></div>
+                <h3 class="os-card-title">{{ service.title }}</h3>
+                <p class="os-card-text">{{ service.description }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Testimonials -->
+<section class="testimonials">
+    <div class="section-title">
+        <h2 style="color: white;">Traveler Experiences</h2>
+        <p style="color: rgba(255, 255, 255, 0.8);">What our adventurers say about their journeys</p>
+    </div>
+
+    <div class="testimonials-grid">
+        {% for testimonial in testimonials %}
+        <div class="testimonial-card animate {{ 'delay-1' if loop.index == 2 else ('delay-2' if loop.index == 3 else '') }}">
+            <div class="testimonial-text">
+                {{ testimonial.quote }}
+            </div>
+            <div class="testimonial-author">
+                <div class="author-img">
+                    <img src="{{ testimonial.image_url }}" alt="{{ testimonial.author }}">
+                </div>
+                <div class="author-info">
+                    <h4>{{ testimonial.author }}</h4>
+                    <p>{{ testimonial.trip }}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+{% include 'partials/_newsletter.html' %}
+{% endblock %}

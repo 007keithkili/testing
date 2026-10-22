@@ -1,0 +1,169 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+{% block crumb %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="admin-page-header">
+    <div>
+        <h1>Welcome back, {{ current_user.name or current_user.username }}</h1>
+        <p>Here is what is happening across the RemoteTravels website today.</p>
+    </div>
+    <div class="page-actions">
+        <a class="btn btn-outline" href="{{ url_for('admin.new_destination') }}">
+            <i class="fas fa-plus"></i> New destination
+        </a>
+        <a class="btn btn-primary" href="{{ url_for('main.index') }}">
+            <i class="fas fa-globe"></i> View site
+        </a>
+    </div>
+</div>
+
+<div class="admin-stats">
+    <div class="stat-card">
+        <div class="stat-icon"><i class="fas fa-map-location-dot"></i></div>
+        <div>
+            <div class="stat-value">{{ stats.destinations }}</div>
+            <div class="stat-label">Destinations</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon info"><i class="fas fa-suitcase-rolling"></i></div>
+        <div>
+            <div class="stat-value">{{ stats.packages }}</div>
+            <div class="stat-label">Packages</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon accent"><i class="fas fa-briefcase"></i></div>
+        <div>
+            <div class="stat-value">{{ stats.jobs }}</div>
+            <div class="stat-label">Open roles</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon success"><i class="fas fa-envelope-open-text"></i></div>
+        <div>
+            <div class="stat-value">{{ stats.messages }}</div>
+            <div class="stat-label">Enquiries</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon info"><i class="fas fa-calendar-check"></i></div>
+        <div>
+            <div class="stat-value">{{ stats.bookings }}</div>
+            <div class="stat-label">Booking requests</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon muted"><i class="fas fa-file-signature"></i></div>
+        <div>
+            <div class="stat-value">{{ stats.applications }}</div>
+            <div class="stat-label">Job applications</div>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon success"><i class="fas fa-users"></i></div>
+        <div>
+            <div class="stat-value">{{ stats.subscribers }}</div>
+            <div class="stat-label">Subscribers</div>
+        </div>
+    </div>
+</div>
+
+<div class="admin-card">
+    <div class="admin-card-head">
+        <h2><i class="fas fa-envelope"></i> Latest enquiries</h2>
+        <a class="btn btn-sm btn-outline" href="{{ url_for('admin.inquiries', tab='messages') }}">
+            View all <i class="fas fa-arrow-right"></i>
+        </a>
+    </div>
+    <div class="admin-card-body flush">
+        <div class="table-wrap">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Received</th>
+                        <th>Name</th>
+                        <th>Subject</th>
+                        <th>Contact</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for message in recent_messages %}
+                    <tr>
+                        <td>{{ message.created_at.strftime('%d %b %Y') if message.created_at else '-' }}</td>
+                        <td class="row-title">{{ message.name }}</td>
+                        <td>{{ message.subject }}</td>
+                        <td><small>{{ message.email }}</small></td>
+                        <td>
+                            <div class="admin-actions">
+                                <a class="btn btn-sm btn-primary" href="{{ url_for('admin.inquiries', tab='messages') }}">Open</a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5">
+                            <div class="table-empty">
+                                <i class="fas fa-inbox"></i>
+                                No enquiries yet. Messages sent from the contact form land here.
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="admin-card">
+    <div class="admin-card-head">
+        <h2><i class="fas fa-calendar-check"></i> Latest booking requests</h2>
+        <a class="btn btn-sm btn-outline" href="{{ url_for('admin.inquiries', tab='bookings') }}">
+            View all <i class="fas fa-arrow-right"></i>
+        </a>
+    </div>
+    <div class="admin-card-body flush">
+        <div class="table-wrap">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Received</th>
+                        <th>Trip</th>
+                        <th>Guest</th>
+                        <th>Travellers</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for booking in recent_bookings %}
+                    <tr>
+                        <td>{{ booking.created_at.strftime('%d %b %Y') if booking.created_at else '-' }}</td>
+                        <td class="row-title">{{ booking.item_title or '-' }}</td>
+                        <td>{{ booking.name }}<br><small>{{ booking.email }}</small></td>
+                        <td>{{ booking.travellers or 1 }}</td>
+                        <td>
+                            <div class="admin-actions">
+                                <a class="btn btn-sm btn-primary" href="{{ url_for('admin.inquiries', tab='bookings') }}">Open</a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5">
+                            <div class="table-empty">
+                                <i class="fas fa-calendar"></i>
+                                No booking requests yet. Requests made from the package pages land here.
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

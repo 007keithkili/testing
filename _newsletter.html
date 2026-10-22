@@ -1,0 +1,12 @@
+<!-- Newsletter -->
+<section class="newsletter">
+    <div class="newsletter-container">
+        <h2>Join Our Adventure Community</h2>
+        <p>Subscribe for exclusive offers, travel inspiration, and early access to new destinations</p>
+        <form class="subscribe-form" method="POST" action="{{ url_for('main.subscribe') }}">
+            {{ newsletter_form.hidden_tag() }}
+            <input type="email" name="email" placeholder="Your email address" required value="{{ request.form.get('email', '') }}">
+            <button type="submit">Subscribe</button>
+        </form>
+    </div>
+</section>

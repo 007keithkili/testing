@@ -1,0 +1,218 @@
+/* RemoteTravels - styles for the dynamic (Flask driven) components.
+   Loaded after the per-page stylesheets in base.html. */
+
+.flash-messages {
+    position: fixed;
+    top: 90px;
+    right: 20px;
+    z-index: 1200;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 380px;
+}
+
+.flash-message {
+    background: var(--bg-card, #fff);
+    border-left: 4px solid var(--secondary, #18a3a7);
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    padding: 14px 18px;
+    color: var(--text, #333);
+    font-size: 0.95rem;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.flash-message.flash-success {
+    border-left-color: #2e9e5b;
+}
+
+.flash-message.flash-danger {
+    border-left-color: #d64545;
+}
+
+.flash-message.flash-warning {
+    border-left-color: var(--accent, #f39c12);
+}
+
+.flash-message strong {
+    display: block;
+    margin-bottom: 4px;
+}
+
+/* --- Forms --- */
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 16px;
+}
+
+.form-field label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-muted, #666);
+}
+
+.form-field .field-error {
+    color: #d64545;
+    font-size: 0.8rem;
+}
+
+.form-field input,
+.form-field select,
+.form-field textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--border-light, #eee);
+    border-radius: 10px;
+    background: var(--bg-card, #fff);
+    color: var(--text, #333);
+    font-size: 0.95rem;
+    font-family: inherit;
+}
+
+.form-field input:focus,
+.form-field select:focus,
+.form-field textarea:focus {
+    outline: 2px solid var(--secondary, #18a3a7);
+    outline-offset: 1px;
+}
+
+.form-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+/* --- Tag filter chips (destinations) --- */
+.tag-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin: 0 auto 32px;
+}
+
+.tag-filter a {
+    padding: 8px 18px;
+    border-radius: 999px;
+    border: 1px solid var(--border-light, #eee);
+    background: var(--bg-card, #fff);
+    color: var(--text-muted, #666);
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    transition: all 0.25s ease;
+}
+
+.tag-filter a:hover,
+.tag-filter a.active {
+    background: var(--primary, #0a4a7c);
+    border-color: var(--primary, #0a4a7c);
+    color: #fff;
+}
+
+/* --- Detail pages --- */
+.detail-hero {
+    padding: 70px 0 40px;
+    background: var(--hero-overlay, rgba(26, 42, 58, 0.85));
+    color: #fff;
+    text-align: center;
+}
+
+.detail-hero h1 {
+    font-size: 3rem;
+    margin-bottom: 12px;
+}
+
+.detail-hero p {
+    opacity: 0.85;
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 32px;
+    padding: 48px 0;
+}
+
+.detail-body {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--text, #333);
+}
+
+.detail-aside {
+    background: var(--bg-card, #fff);
+    border: 1px solid var(--border-light, #eee);
+    border-radius: 18px;
+    padding: 26px;
+    align-self: start;
+    box-shadow: var(--shadow, 0 15px 40px rgba(0, 0, 0, 0.1));
+}
+
+.detail-aside .price {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--primary, #0a4a7c);
+    margin-bottom: 4px;
+}
+
+.detail-aside .price span {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text-muted, #666);
+}
+
+.detail-aside ul {
+    list-style: none;
+    margin: 18px 0;
+}
+
+.detail-aside ul li {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border-light, #eee);
+    font-size: 0.92rem;
+    color: var(--text-muted, #666);
+}
+
+.detail-meta {
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: var(--text-muted, #666);
+}
+
+.feature-list {
+    list-style: none;
+    margin: 20px 0;
+}
+
+.feature-list li {
+    padding: 8px 0;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+}
+
+.feature-list i {
+    color: var(--secondary, #18a3a7);
+    margin-top: 4px;
+}
+
+@media (max-width: 768px) {
+    .detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .detail-hero h1 {
+        font-size: 2.2rem;
+    }
+}

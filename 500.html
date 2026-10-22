@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Something went wrong | {{ site_settings.get('company_name', 'RemoteTravels') }}{% endblock %}
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/index.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-content">
+        <div class="hero-text">
+            <h1>500</h1>
+            <p>Something went wrong on our side. Please try again in a moment, or contact our travel experts directly.</p>
+            <div class="hero-btns">
+                <a href="{{ url_for('main.index') }}" class="btn btn-primary">Back Home</a>
+                <a href="{{ url_for('main.contacts') }}" class="btn btn-outline" style="color: white; border-color: white;">Contact Us</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

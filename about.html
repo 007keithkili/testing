@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+
+{% block title %}About us | {{ site_settings.get('company_name', 'RemoteTravels') }}{% endblock %}
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/about.css') }}">
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-content">
+        <div class="hero-text">
+            <h1>About us</h1>
+            <p>Crafting unforgettable adventures, one story at a time. We are located in Narok, Olmaa House room 10 along Narok-Mai-mahiu road.</p>
+            <div class="hero-btns">
+                <a href="{{ url_for('main.destinations') }}" class="btn btn-primary">Explore Destinations</a>
+                <a href="{{ url_for('main.contacts') }}" class="btn btn-outline" style="color: white; border-color: white;">Customize Your Tour</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Expedition Tours — About Us Section -->
+<section class="about-expedition">
+    <div class="about-expedition__inner">
+        <div class="about-expedition__photos">
+            <div class="photo-large">
+                <img src="https://i.pinimg.com/1200x/65/bc/5f/65bc5f110cca2a92932bf01d492e18b9.jpg" alt="Wild Safari in Kenya">
+            </div>
+            <div class="photo-small photo-top">
+                <img src="https://i.pinimg.com/1200x/37/9f/3a/379f3a7d5543c6e86ca163f07419904e.jpg" alt="Our Office Team">
+            </div>
+            <div class="photo-small photo-bottom">
+                <img src="https://i.pinimg.com/736x/ce/bf/5f/cebf5fb65b441ac5f090d865f0338414.jpg" alt="Unforgettable experience">
+            </div>
+        </div>
+
+        <div class="about-expedition__content">
+            <h2>WELCOME</h2>
+            <h3>Our values are the driving force behind everything we do</h3>
+            <p>
+                <strong>Remote Travels</strong> is a Tour Operator founded in 2022 as a people-centric company. Since then, we've grown into a world-class safari and tour operator across Kenya, East Africa, and the entire globe.
+            </p>
+            <p>
+                Based in Narok — one of Kenya's most developed metropolitan hubs — we coordinate unforgettable safaris and tours in every corner of the world.
+            </p>
+            <p>
+                We strive to bring you a unique and memorable Southern African travel experience through our expertise and our commitment to ensuring that each of our clients departs with lifelong memories of adventure in one of the world's most remarkable regions.
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- Why Choose Expedition Tours Section -->
+<section class="why-expedition">
+    <div class="why-expedition__inner">
+        <div class="why-expedition__header">
+            <h2>Why We're Top-Rated</h2>
+            <p>From insider perks to expert guides, discover what sets Expedition Tours apart.</p>
+        </div>
+
+        <div class="why-expedition__grid">
+            {% for feature in features %}
+            <div class="why-card">
+                <div class="why-icon"><i class="fas {{ feature.icon or 'fa-star' }}"></i></div>
+                <h3>{{ feature.title }}</h3>
+                <p>{{ feature.description }}</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- About RemoteTravels in Narok -->
+<section id="about-remote-travels" class="about-section">
+    <div class="container">
+        <h2 class="section-title">About RemoteTravels in Narok</h2>
+        <p class="intro">
+            <strong>RemoteTravels</strong>, your gateway to authentic Maasai Mara adventures and the heart of Narok Town. We've been
+            serving intrepid explorers, wildlife enthusiasts, and culture seekers since 2022, crafting seamless safari experiences that
+            begin the moment you touch down in Narok.
+        </p>
+
+        <div class="why-narok">
+            <h3 class="sub-title">Why Narok?</h3>
+            <p>
+                Situated just 80 km from the iconic Maasai Mara, Narok Town is the perfect launchpad for game drives, hot-air balloon
+                rides, and cultural immersions. From the lively Market Roundabout to the serene lodge ecosystems, we ensure you feel right at home—no
+                matter where your journey takes you.
+            </p>
+            <p>
+                Our Narok office is staffed by local experts who know the Mara's wildlife corridors, cultural nuances, and hidden gems like the
+                back of their hand. We're here to make your safari dreams a reality, whether you're a first-time visitor or a seasoned traveler.
+            </p>
+        </div>
+
+        <h3 class="sub-title">At Key Physical Touchpoints</h3>
+        <div class="grid">
+            {% for touchpoint in touchpoints %}
+            <article class="card">
+                {% if touchpoint.image_url %}
+                <img src="{{ touchpoint.image_url }}" alt="{{ touchpoint.title }}" class="responsive-img">
+                {% endif %}
+                <h4>{{ touchpoint.title }}</h4>
+                <ul>
+                    {% for bullet in touchpoint.bullets or [] %}
+                    <li>{{ bullet }}</li>
+                    {% endfor %}
+                </ul>
+            </article>
+            {% endfor %}
+        </div>
+
+        <h3 class="sub-title">Ensuring Your Safety &amp; Peace of Mind</h3>
+        <ul class="safety-list">
+            <li><strong>Verified Vehicles &amp; Drivers:</strong> All our 4×4s undergo daily inspections; drivers are licensed, Maasai-trained professionals with in-depth knowledge of the Mara's wildlife corridors.</li>
+            <li><strong>Real-Time Tracking:</strong> Each vehicle is GPS-monitored and linked to our 24/7 dispatch center in Narok, so we always know where you are—even off the beaten path.</li>
+            <li><strong>Emergency Response Protocols:</strong> Whether it's a flat tire or a sudden storm, our rapid-deployment support teams are on standby at both Narok town and lodge locations.</li>
+            <li><strong>Health &amp; Hygiene Standards:</strong> From contactless check-ins to sanitized cabins and hand-washing stations at every touchpoint, your well-being is our top priority.</li>
+        </ul>
+    </div>
+</section>
+
+{% include 'partials/_newsletter.html' %}
+{% endblock %}

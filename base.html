@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Admin{% endblock %} | RemoteTravels</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/site.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+<body>
+<div class="admin-shell">
+    <aside class="admin-sidebar">
+        <a href="{{ url_for('admin.dashboard') }}" class="admin-brand">
+            <div class="logo-icon">
+                {% if site_settings.get('logo_url') %}
+                <img src="{{ site_settings.get('logo_url') }}" alt="{{ site_settings.get('company_name', 'RemoteTravels') }}">
+                {% else %}
+                <i class="fas fa-mountain-sun"></i>
+                {% endif %}
+            </div>
+            <div class="brand-text">
+                <strong>{{ site_settings.get('company_name', 'RemoteTravels') }}</strong>
+                <span>Content Manager</span>
+            </div>
+        </a>
+
+        <div class="admin-nav-group">
+            <div class="admin-nav-title">Overview</div>
+            <ul>
+                <li>
+                    <a href="{{ url_for('admin.dashboard') }}"
+                       class="{{ 'active' if request.endpoint == 'admin.dashboard' }}">
+                        <i class="fas fa-chart-pie"></i> Dashboard
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="admin-nav-group">
+            <div class="admin-nav-title">Content</div>
+            <ul>
+                <li>
+                    <a href="{{ url_for('admin.destinations') }}"
+                       class="{{ 'active' if request.endpoint in ('admin.destinations', 'admin.new_destination', 'admin.edit_destination') }}">
+                        <i class="fas fa-map-location-dot"></i> Destinations
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('admin.packages') }}"
+                       class="{{ 'active' if request.endpoint in ('admin.packages', 'admin.new_package', 'admin.edit_package', 'admin.new_experience', 'admin.edit_experience') }}">
+                        <i class="fas fa-suitcase-rolling"></i> Packages
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('admin.jobs') }}"
+                       class="{{ 'active' if request.endpoint in ('admin.jobs', 'admin.new_job', 'admin.edit_job', 'admin.job_applications') }}">
+                        <i class="fas fa-briefcase"></i> Careers
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('admin.pages') }}"
+                       class="{{ 'active' if request.endpoint in ('admin.pages', 'admin.edit_page') }}">
+                        <i class="fas fa-file-contract"></i> Legal pages
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="admin-nav-group">
+            <div class="admin-nav-title">Engagement</div>
+            <ul>
+                <li>
+                    <a href="{{ url_for('admin.inquiries') }}"
+                       class="{{ 'active' if request.endpoint == 'admin.inquiries' }}">
+                        <i class="fas fa-inbox"></i> Inquiries
+                        {% if stats.messages %}<span class="badge badge-warning">{{ stats.messages }}</span>{% endif %}
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ url_for('admin.settings') }}"
+                       class="{{ 'active' if request.endpoint == 'admin.settings' }}">
+                        <i class="fas fa-sliders"></i> Settings
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="sidebar-foot">
+            <ul>
+                <li><a href="{{ url_for('main.index') }}"><i class="fas fa-arrow-up-right-from-square"></i> View site</a></li>
+                <li><a href="{{ url_for('auth.logout') }}"><i class="fas fa-right-from-bracket"></i> Sign out</a></li>
+            </ul>
+        </div>
+    </aside>
+
+    <div class="admin-main">
+        <header class="admin-topbar">
+            <div class="crumbs">
+                <span>RemoteTravels</span>
+                <span class="sep"><i class="fas fa-chevron-right"></i></span>
+                <strong>{% block crumb %}Dashboard{% endblock %}</strong>
+            </div>
+            <div class="topbar-actions">
+                <a class="btn btn-sm btn-outline" href="{{ url_for('main.index') }}">
+                    <i class="fas fa-external-link-alt"></i> View site
+                </a>
+                <button class="btn btn-sm btn-icon btn-outline" id="themeToggle" type="button" aria-label="Toggle dark mode">
+                    <i class="fas fa-moon" id="themeIcon"></i>
+                </button>
+                <div class="admin-user">
+                    <span class="avatar">{{ (current_user.name or current_user.username)[:1] }}</span>
+                    <span class="user-meta">
+                        <span class="user-name">{{ current_user.name or current_user.username }}</span><br>
+                        <span class="user-role">{{ current_user.role.name if current_user.role else 'Staff' }}</span>
+                    </span>
+                </div>
+            </div>
+        </header>
+
+        <section class="admin-content">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            <div class="flash-messages">
+                {% for category, message in messages %}
+                <div class="flash-message flash-{{ category }}">
+                    <strong>{{ category|capitalize }}</strong>
+                    <span>{{ message }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% endwith %}
+
+            {% block content %}{% endblock %}
+        </section>
+    </div>
+</div>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

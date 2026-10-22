@@ -1,0 +1,79 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}Applications{% endblock %}
+{% block crumb %}Careers{% endblock %}
+
+{% block content %}
+<div class="admin-page-header">
+    <div>
+        <h1>Applications — {{ job.title }}</h1>
+        <p>{{ job.location or '' }}{% if job.location %} · {% endif %}{{ applications|length }} application{{ '' if applications|length == 1 else 's' }} received.</p>
+    </div>
+    <div class="page-actions">
+        <a class="btn" href="{{ url_for('admin.jobs') }}">
+            <i class="fas fa-arrow-left"></i> Back to careers
+        </a>
+    </div>
+</div>
+
+<div class="admin-card">
+    <div class="admin-card-head">
+        <h2><i class="fas fa-file-signature"></i> Applicants</h2>
+    </div>
+    <div class="admin-card-body flush">
+        <div class="table-wrap">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Received</th>
+                        <th>Applicant</th>
+                        <th>Phone</th>
+                        <th>CV</th>
+                        <th>Note</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for application in applications %}
+                    <tr>
+                        <td>{{ application.created_at.strftime('%d %b %Y %H:%M') if application.created_at else '-' }}</td>
+                        <td>
+                            <span class="row-title">{{ application.name }}</span><br>
+                            <small>{{ application.email }}</small>
+                        </td>
+                        <td>{{ application.phone or '-' }}</td>
+                        <td>
+                            {% if application.cv_filename %}
+                            <span class="badge badge-success">Uploaded</span>
+                            {% else %}
+                            <span class="badge badge-muted">None</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ application.message or '-' }}</td>
+                        <td>
+                            <div class="admin-actions">
+                                <form method="POST" action="{{ url_for('admin.delete_application', id=application.id) }}"
+                                      onsubmit="return confirm('Delete this application?');">
+                                    <button type="submit" class="btn btn-sm btn-danger">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6">
+                            <div class="table-empty">
+                                <i class="fas fa-users"></i>
+                                No applications for this role yet.
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

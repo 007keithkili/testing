@@ -1,0 +1,113 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}{{ 'New destination' if not item else 'Edit destination' }}{% endblock %}
+{% block crumb %}Destinations{% endblock %}
+
+{% block content %}
+<div class="admin-page-header">
+    <div>
+        <h1>{{ 'New destination' if not item else 'Edit ' ~ item.name }}</h1>
+        <p>
+            {% if item %}
+            Published at <code>/destinations/{{ item.slug }}</code>. Changes appear on the site immediately.
+            {% else %}
+            Add a destination to the catalogue. The URL slug is generated from the name automatically.
+            {% endif %}
+        </p>
+    </div>
+    <div class="page-actions">
+        {% if item %}
+        <a class="btn btn-outline" href="{{ url_for('main.destination_detail', slug=item.slug) }}" target="_blank">
+            <i class="fas fa-eye"></i> Preview
+        </a>
+        {% endif %}
+        <a class="btn" href="{{ url_for('admin.destinations') }}">Back to list</a>
+    </div>
+</div>
+
+<div class="admin-card">
+    <div class="admin-card-body">
+        <form method="POST" class="admin-form">
+            {{ form.hidden_tag() }}
+
+            <div class="form-section-title">Basics</div>
+            <div class="form-grid">
+                <div class="form-field">
+                    <label for="name">Name</label>
+                    {{ form.name(id='name', placeholder='Maasai Mara Safari') }}
+                    {% for error in form.name.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+                </div>
+                <div class="form-field">
+                    <label for="slug">Slug (URL)</label>
+                    {{ form.slug(id='slug', placeholder='auto-generated from the name') }}
+                    <span class="form-hint">Leave blank to generate it from the name.</span>
+                </div>
+                <div class="form-field">
+                    <label for="tag">Category</label>
+                    {{ form.tag(id='tag', placeholder='Safari') }}
+                </div>
+                <div class="form-field">
+                    <label for="location">Location</label>
+                    {{ form.location(id='location', placeholder='Kenya') }}
+                </div>
+            </div>
+
+            <div class="form-section-title">Pricing &amp; duration</div>
+            <div class="form-grid">
+                <div class="form-field">
+                    <label for="price">Price label</label>
+                    {{ form.price(id='price', placeholder='$1,299') }}
+                </div>
+                <div class="form-field">
+                    <label for="price_value">Price (numeric)</label>
+                    {{ form.price_value(id='price_value') }}
+                    <span class="form-hint">Used for sorting and filtering.</span>
+                </div>
+                <div class="form-field">
+                    <label for="duration_days">Duration (days)</label>
+                    {{ form.duration_days(id='duration_days') }}
+                </div>
+                <div class="form-field">
+                    <label for="sort_order">Sort order</label>
+                    {{ form.sort_order(id='sort_order') }}
+                    <span class="form-hint">Lower numbers appear first.</span>
+                </div>
+            </div>
+
+            <div class="form-section-title">Media &amp; copy</div>
+            <div class="form-field">
+                <label for="image_url">Image URL</label>
+                {{ form.image_url(id='image_url', placeholder='https://images.unsplash.com/...') }}
+            </div>
+
+            <div class="form-field">
+                <label for="description">Description</label>
+                {{ form.description(id='description', rows=6) }}
+            </div>
+
+            <div class="form-field">
+                <label for="highlights">Highlights (one per line)</label>
+                {{ form.highlights(id='highlights', rows=5) }}
+                <span class="form-hint">Each line becomes a bullet point on the destination card and in the quick-look modal.</span>
+            </div>
+
+            <div class="form-section-title">Visibility</div>
+            <div class="form-check">
+                {{ form.is_featured(id='is_featured') }}
+                <label for="is_featured">Show on the home page</label>
+            </div>
+            <div class="form-check">
+                {{ form.is_active(id='is_active') }}
+                <label for="is_active">Published</label>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-check"></i> Save destination
+                </button>
+                <a class="btn btn-ghost" href="{{ url_for('admin.destinations') }}">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

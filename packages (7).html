@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block title %}Premium Packages | {{ site_settings.get('company_name', 'RemoteTravels') }}{% endblock %}
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/packages.css') }}">
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-content">
+        <div class="hero-text">
+            <h1>Premium Packages</h1>
+            <p>Explore our tour packages and discover unforgettable travel experiences.</p>
+            <div class="hero-btns">
+                <a href="{{ url_for('main.destinations') }}" class="btn btn-primary">Touring</a>
+                <a href="{{ url_for('main.contacts') }}" class="btn btn-outline" style="color: white; border-color: white;">Customize Your Tour</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Tour Packages Section -->
+<section class="section packages">
+    <div class="section-title">
+        <h2>Premium Tour Packages</h2>
+        <p>All-inclusive experiences designed for the discerning traveler</p>
+    </div>
+
+    <section class="packages">
+        <div class="packages-grid">
+            {% for package in packages %}
+            <div class="package-card animate {{ 'delay-1' if loop.index == 2 else ('delay-2' if loop.index == 3 else '') }}">
+                {% if package.highlight %}
+                <div class="package-highlight">{{ package.highlight }}</div>
+                {% endif %}
+                <div class="package-header">
+                    <h3><a href="{{ url_for('main.package_detail', slug=package.slug) }}">{{ package.name }}</a></h3>
+                    <div class="package-price">{{ package.price_display }} <span>/ person</span></div>
+                    <div class="package-duration">
+                        <i class="fas fa-calendar-alt"></i> {{ package.duration }}
+                    </div>
+                </div>
+                <div class="package-features">
+                    {% if package.tags %}
+                    <div class="package-tags">
+                        {% for tag in package.tags %}
+                        <span class="tag">{{ tag }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    <ul>
+                        {% for feature in package.features %}
+                        <li><i class="fas fa-check"></i> {{ feature }}</li>
+                        {% endfor %}
+                    </ul>
+                    <a href="{{ url_for('main.package_detail', slug=package.slug) }}" class="btn btn-primary">
+                        Book This Package <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <!-- Package Comparison Table -->
+    {% if packages|length > 1 %}
+    <div class="comparison-section">
+        <h3>Package Comparison</h3>
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th class="feature-name">Features</th>
+                    {% for package in packages %}
+                    <th>{{ package.name }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in comparison_rows %}
+                <tr>
+                    <td class="feature-name">{{ row.label }}</td>
+                    {% for value in row['values'] %}
+                    <td>{{ value|safe }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+</section>
+
+<!-- Additional Experiences Section -->
+<section class="additional-experiences">
+    <div class="experiences-container">
+        {% for experience in experiences %}
+        <div class="experience-item">
+            <div class="exp-image">
+                <img src="{{ experience.image_url }}" alt="{{ experience.title }}">
+            </div>
+            <div class="exp-details">
+                <h3>{{ experience.title }}</h3>
+                <ul>
+                    {% if experience.duration %}<li><strong>Duration:</strong> {{ experience.duration }}</li>{% endif %}
+                    {% if experience.highlights %}<li><strong>Highlights:</strong> {{ experience.highlights }}</li>{% endif %}
+                </ul>
+            </div>
+            <div class="exp-cta">
+                <span class="exp-price">{{ experience.price }}</span>
+                <span class="exp-per">per person</span>
+                <a href="{{ url_for('main.contacts') }}" class="btn exp-btn">Book Now</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+{% include 'partials/_newsletter.html' %}
+{% endblock %}

@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block title %}Contact us | {{ site_settings.get('company_name', 'RemoteTravels') }}{% endblock %}
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/contacts.css') }}">
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-content">
+        <div class="hero-text">
+            <h1>Contact us</h1>
+            <p>We are located in Narok, Olmaa House room 10 along Narok-Mai-mahiu road. If you have questions or need assistance? Get in touch with our travel experts today.</p>
+            <div class="hero-btns">
+                <a href="#contact-form" class="btn btn-primary">Get in touch</a>
+                <a href="{{ url_for('main.packages') }}" class="btn btn-outline" style="color: white; border-color: white;">Customize Your Tour</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Us Section -->
+<section class="contact-us" id="contact-form">
+    <div class="contact-us__inner">
+        <div class="contact-us__info">
+            <h2>Let Us Contact You</h2>
+            <p>Have questions or custom requests? Fill out the form and our travel specialists will get back to you within 24 hours.</p>
+            <ul class="contact-us__details">
+                <li><i class="fas fa-phone-alt"></i> {{ site_settings.get('phone', '+254 711 697 080') }}</li>
+                <li><i class="fas fa-envelope"></i> {{ site_settings.get('email', 'remotetravels06@gmail.com') }}</li>
+                <li><i class="fas fa-map-marker-alt"></i> {{ site_settings.get('address', 'Narok, Olmaa House room 10, Kenya') }}</li>
+            </ul>
+        </div>
+
+        <form class="contact-us__form" method="POST" action="{{ url_for('main.contacts') }}">
+            {{ form.hidden_tag() }}
+            <div class="form-row">
+                {{ form.name(placeholder='Your Name') }}
+                {{ form.email(placeholder='Your Email') }}
+                {{ form.travellers(placeholder='Number of travellers') }}
+                {{ form.destination(placeholder='Destination') }}
+            </div>
+            <div class="form-row">
+                {{ form.phone(placeholder='Phone Number') }}
+                {{ form.subject(title='Subject') }}
+            </div>
+            {{ form.message(placeholder='Your Message', rows=5) }}
+            <button type="submit" class="btn contact-btn">Submit</button>
+        </form>
+    </div>
+</section>
+
+<!-- More Ways to Reach Us -->
+<section class="contact-extra">
+    <div class="contact-extra__inner">
+        <div class="contact-card">
+            <div class="card-icon"><i class="fas fa-map-marker-alt"></i></div>
+            <h4>Our Office</h4>
+            <p>{{ site_settings.get('address', 'Narok, Olmaa House room 10, Kenya') }}</p>
+            <div class="map-container">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18…" allowfullscreen="" loading="lazy" title="RemoteTravels office location"></iframe>
+            </div>
+        </div>
+
+        <div class="contact-card">
+            <div class="card-icon"><i class="fas fa-clock"></i></div>
+            <h4>Business Hours</h4>
+            <ul>
+                <li>Mon–Fri: 8 am – 6 pm</li>
+                <li>Sat: 9 am – 2 pm</li>
+                <li>Sun: Closed</li>
+            </ul>
+        </div>
+
+        <div class="contact-card">
+            <div class="card-icon"><i class="fas fa-comments"></i></div>
+            <h4>Live Chat</h4>
+            <p>Our specialists are online now—click below to start chatting!</p>
+            <a href="https://wa.me/{{ site_settings.get('whatsapp', '254711697080') }}" target="_blank" rel="noopener noreferrer" class="btn chat-btn">Start Chat</a>
+        </div>
+    </div>
+</section>
+
+{% include 'partials/_newsletter.html' %}
+{% endblock %}

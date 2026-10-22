@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}Careers | {{ site_settings.get('company_name', 'RemoteTravels') }}{% endblock %}
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/careers.css') }}">
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-content">
+        <div class="hero-text">
+            <h1>Careers</h1>
+            <p>Build your future with us—explore open roles and turn your passion for travel into a rewarding career</p>
+            <div class="hero-btns">
+                <a href="#open-roles" class="btn btn-primary">Explore careers</a>
+                <a href="{{ url_for('main.contacts') }}" class="btn btn-outline" style="color: white; border-color: white;">Customize Your Tour</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Careers content -->
+<section class="careers" id="open-roles">
+    {% for job in jobs %}
+    <div class="job">
+        <h2><a href="{{ url_for('main.job_detail', slug=job.slug) }}">{{ job.title }}</a></h2>
+        <p class="summary">{{ job.summary }}</p>
+        <h3>Responsibilities:</h3>
+        <ul>
+            {% for responsibility in job.responsibilities or [] %}
+            <li>{{ responsibility }}</li>
+            {% endfor %}
+        </ul>
+        <h3>Qualifications:</h3>
+        <ul>
+            {% for qualification in job.qualifications or [] %}
+            <li>{{ qualification }}</li>
+            {% endfor %}
+        </ul>
+        <a href="{{ url_for('main.job_detail', slug=job.slug) }}" class="apply-btn">MAKE AN APPLICATION</a>
+    </div>
+    {% else %}
+    <div class="job">
+        <h2>No open positions</h2>
+        <p class="summary">We are always looking for talented people. Send us an email at
+            {{ site_settings.get('email', 'info@remotetravels.co.ke') }} and we will keep you in mind.</p>
+    </div>
+    {% endfor %}
+</section>
+
+{% include 'partials/_newsletter.html' %}
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Thank you | {{ site_settings.get('company_name', 'RemoteTravels') }}{% endblock %}
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/index.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-content">
+        <div class="hero-text">
+            <h1>Thank you</h1>
+            <p>Your message is on its way to our travel specialists. We will be in touch within 24 hours.</p>
+            <div class="hero-btns">
+                <a href="{{ url_for('main.destinations') }}" class="btn btn-primary">Explore Destinations</a>
+                <a href="{{ url_for('main.index') }}" class="btn btn-outline" style="color: white; border-color: white;">Back Home</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

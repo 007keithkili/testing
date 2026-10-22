@@ -1,0 +1,96 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}Destinations{% endblock %}
+{% block crumb %}Destinations{% endblock %}
+
+{% block content %}
+<div class="admin-page-header">
+    <div>
+        <h1>Destinations</h1>
+        <p>Every destination published on the website, with its price, duration and visibility.</p>
+    </div>
+    <div class="page-actions">
+        <a class="btn btn-primary" href="{{ url_for('admin.new_destination') }}">
+            <i class="fas fa-plus"></i> Add destination
+        </a>
+    </div>
+</div>
+
+<div class="admin-card">
+    <div class="admin-card-head">
+        <h2><i class="fas fa-map-location-dot"></i> {{ destinations|length }} destination{{ '' if destinations|length == 1 else 's' }}</h2>
+        <div class="admin-toolbar" style="margin: 0;">
+            <label class="search">
+                <i class="fas fa-search"></i>
+                <input type="search" id="adminSearch" placeholder="Search destinations...">
+            </label>
+        </div>
+    </div>
+    <div class="admin-card-body flush">
+        <div class="table-wrap">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Price</th>
+                        <th>Duration</th>
+                        <th>Location</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in destinations %}
+                    <tr>
+                        <td><img class="thumb" src="{{ item.image_url }}" alt="{{ item.name }}"></td>
+                        <td>
+                            <span class="row-title">{{ item.name }}</span><br>
+                            <small>/destinations/{{ item.slug }}</small>
+                        </td>
+                        <td><span class="badge badge-muted">{{ item.tag }}</span></td>
+                        <td class="row-title">{{ item.price_display }}</td>
+                        <td>{{ item.duration }}</td>
+                        <td>{{ item.location or '-' }}</td>
+                        <td>
+                            {% if item.is_active %}
+                            <span class="badge badge-success">Live</span>
+                            {% else %}
+                            <span class="badge badge-muted">Hidden</span>
+                            {% endif %}
+                            {% if item.is_featured %}<span class="badge badge-warning">Featured</span>{% endif %}
+                        </td>
+                        <td>
+                            <div class="admin-actions">
+                                <a class="btn btn-sm btn-primary" href="{{ url_for('admin.edit_destination', id=item.id) }}">
+                                    <i class="fas fa-pen"></i> Edit
+                                </a>
+                                <a class="btn btn-sm" href="{{ url_for('main.destination_detail', slug=item.slug) }}" target="_blank">
+                                    <i class="fas fa-eye"></i> View
+                                </a>
+                                <form method="POST" action="{{ url_for('admin.delete_destination', id=item.id) }}"
+                                      onsubmit="return confirm('Delete {{ item.name }}?');">
+                                    <button type="submit" class="btn btn-sm btn-danger">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="8">
+                            <div class="table-empty">
+                                <i class="fas fa-map-location-dot"></i>
+                                No destinations yet. Add your first one to populate the destinations page.
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

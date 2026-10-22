@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ job.title }} | {{ site_settings.get('company_name', 'RemoteTravels') }}{% endblock %}
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/careers.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="detail-hero">
+    <h1>{{ job.title }}</h1>
+    <p>{{ job.location or 'Narok, Kenya' }}</p>
+</section>
+
+<div class="container">
+    <div class="detail-grid">
+        <div>
+            <div class="detail-body">
+                {% if job.summary %}<p>{{ job.summary }}</p>{% endif %}
+
+                {% if job.responsibilities %}
+                <h3>Responsibilities:</h3>
+                <ul class="feature-list">
+                    {% for responsibility in job.responsibilities %}
+                    <li><i class="fas fa-check"></i> {{ responsibility }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+
+                {% if job.qualifications %}
+                <h3>Qualifications:</h3>
+                <ul class="feature-list">
+                    {% for qualification in job.qualifications %}
+                    <li><i class="fas fa-check"></i> {{ qualification }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+        </div>
+
+        <aside class="detail-aside">
+            <h3 style="margin-bottom: 10px;">Apply for this role</h3>
+            <form method="POST" action="{{ url_for('main.job_detail', slug=job.slug) }}" enctype="multipart/form-data">
+                {{ form.hidden_tag() }}
+                <div class="form-field">
+                    <label for="apply-name">Full name</label>
+                    {{ form.name(id='apply-name', placeholder='Your name') }}
+                    {% for error in form.name.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+                </div>
+                <div class="form-field">
+                    <label for="apply-email">Email</label>
+                    {{ form.email(id='apply-email', placeholder='you@example.com') }}
+                    {% for error in form.email.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+                </div>
+                <div class="form-field">
+                    <label for="apply-phone">Phone</label>
+                    {{ form.phone(id='apply-phone', placeholder='Optional') }}
+                </div>
+                <div class="form-field">
+                    <label for="apply-message">Cover note</label>
+                    {{ form.message(id='apply-message', rows=4, placeholder='Tell us about yourself') }}
+                </div>
+                <div class="form-field">
+                    <label for="apply-cv">CV / supporting document</label>
+                    {{ form.cv(id='apply-cv') }}
+                    {% for error in form.cv.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Submit application</button>
+            </form>
+        </aside>
+    </div>
+</div>
+
+{% include 'partials/_newsletter.html' %}
+{% endblock %}

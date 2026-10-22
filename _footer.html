@@ -1,0 +1,81 @@
+<!-- Footer -->
+<footer>
+    <div class="footer-container">
+        <div class="footer-col">
+            <a href="{{ url_for('main.index') }}" class="logo">
+                <div class="logo-icon">
+                    <img src="{{ site_settings.get('logo_url', 'https://i.pinimg.com/736x/d2/3d/d8/d23dd8ad0a03ce25635349483c6e7130.jpg') }}"
+                         alt="{{ site_settings.get('company_name', 'RemoteTravels') }} Logo">
+                </div>
+                <div class="logo-text">
+                    <span>{{ site_settings.get('company_name', 'RemoteTravels') }}</span>
+                    <span>{{ site_settings.get('tagline', 'Discover Extraordinary') }}</span>
+                </div>
+            </a>
+            <p style="margin: 20px 0; color: var(--footer-text);">Creating unforgettable travel experiences with a focus on sustainability, authenticity, and adventure.</p>
+            <div class="social-links">
+                <a href="{{ site_settings.get('facebook', '#') }}" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                <a href="{{ site_settings.get('twitter', '#') }}" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="{{ site_settings.get('instagram', '#') }}" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                <a href="{{ site_settings.get('youtube', '#') }}" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                <a href="{{ site_settings.get('pinterest', '#') }}" aria-label="Pinterest"><i class="fab fa-pinterest"></i></a>
+            </div>
+        </div>
+
+        <div class="footer-col">
+            <h4>Quick Links</h4>
+            <ul class="footer-links">
+                <li><a href="{{ url_for('main.index') }}">Home</a></li>
+                <li><a href="{{ url_for('main.destinations') }}">Destinations</a></li>
+                <li><a href="{{ url_for('main.packages') }}">Packages</a></li>
+                <li><a href="{{ url_for('main.careers') }}">Careers</a></li>
+                <li><a href="{{ url_for('main.about') }}">About</a></li>
+                <li><a href="{{ url_for('main.contacts') }}">Contact</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-col">
+            <h4>Legal</h4>
+            <ul class="footer-links">
+                {% for page in legal_pages %}
+                <li><a href="{{ url_for('main.legal', slug=page.slug) }}"><i class="fas fa-chevron-right"></i> {{ page.title }}</a></li>
+                {% else %}
+                <li><a href="{{ url_for('main.legal', slug='privacy') }}"><i class="fas fa-chevron-right"></i> Privacy Policy</a></li>
+                <li><a href="{{ url_for('main.legal', slug='terms') }}"><i class="fas fa-chevron-right"></i> Terms and Conditions</a></li>
+                <li><a href="{{ url_for('main.legal', slug='cancellation') }}"><i class="fas fa-chevron-right"></i> Cancellation Policy</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="footer-col">
+            <h4>Destinations</h4>
+            <ul class="footer-links">
+                <li><a href="{{ url_for('main.destinations', tag='Safari') }}"><i class="fas fa-chevron-right"></i> Africa Safaris</a></li>
+                <li><a href="{{ url_for('main.destinations', tag='Luxury') }}"><i class="fas fa-chevron-right"></i> Luxury Escapes</a></li>
+                <li><a href="{{ url_for('main.destinations', tag='Adventure') }}"><i class="fas fa-chevron-right"></i> Adventures</a></li>
+                <li><a href="{{ url_for('main.destinations') }}"><i class="fas fa-chevron-right"></i> All destinations</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-col">
+            <h4>Contact Us</h4>
+            <ul class="contact-info">
+                <li><i class="fas fa-phone-alt"></i> {{ site_settings.get('phone', '+254 711 697 080') }}</li>
+                <li><i class="fas fa-envelope"></i> {{ site_settings.get('email', 'info@remotetravels.com') }}</li>
+                <li><i class="fas fa-clock"></i> {{ site_settings.get('hours', 'Mon-Fri: 8AM - 6PM, Sat: 9AM - 4PM') }}</li>
+            </ul>
+        </div>
+
+        <div class="footer-col">
+            <h4>Customer Promise</h4>
+            <div class="logo-icon">
+                <i class="fas fa-mountain"></i>
+            </div>
+            <ul>Uncompromising transparency is our credibility, built on integrity and respectful partnerships.  We make our clients' operations easier by assuming effort and delivering convenience</ul>
+        </div>
+    </div>
+
+    <div class="copyright">
+        <p>&copy; {{ current_year }} {{ site_settings.get('company_name', 'RemoteTravels') }}. All rights reserved. | Designed with <i class="fas fa-heart" style="color: var(--accent);"></i> for Adventurers by keith kili</p>
+    </div>
+</footer>

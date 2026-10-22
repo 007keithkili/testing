@@ -1,0 +1,79 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}{{ 'New job posting' if not item else 'Edit job posting' }}{% endblock %}
+{% block crumb %}Careers{% endblock %}
+
+{% block content %}
+<div class="admin-page-header">
+    <div>
+        <h1>{{ 'New job posting' if not item else 'Edit ' ~ item.title }}</h1>
+        <p>
+            {% if item %}
+            Published at <code>/careers/{{ item.slug }}</code>.
+            {% else %}
+            Advertise a role on the careers page. The slug is generated from the title automatically.
+            {% endif %}
+        </p>
+    </div>
+    <div class="page-actions">
+        {% if item %}
+        <a class="btn btn-outline" href="{{ url_for('main.job_detail', slug=item.slug) }}" target="_blank">
+            <i class="fas fa-eye"></i> Preview
+        </a>
+        {% endif %}
+        <a class="btn" href="{{ url_for('admin.jobs') }}">Back to list</a>
+    </div>
+</div>
+
+<div class="admin-card">
+    <div class="admin-card-body">
+        <form method="POST" class="admin-form">
+            {{ form.hidden_tag() }}
+
+            <div class="form-grid">
+                <div class="form-field">
+                    <label for="title">Job title</label>
+                    {{ form.title(id='title', placeholder='Tour Guide') }}
+                    {% for error in form.title.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+                </div>
+                <div class="form-field">
+                    <label for="slug">Slug (URL)</label>
+                    {{ form.slug(id='slug', placeholder='auto-generated from the title') }}
+                    <span class="form-hint">Leave blank to generate it from the title.</span>
+                </div>
+                <div class="form-field">
+                    <label for="location">Location</label>
+                    {{ form.location(id='location', placeholder='Narok, Kenya') }}
+                </div>
+            </div>
+
+            <div class="form-field">
+                <label for="summary">Job summary</label>
+                {{ form.summary(id='summary', rows=5) }}
+            </div>
+
+            <div class="form-field">
+                <label for="responsibilities">Responsibilities (one per line)</label>
+                {{ form.responsibilities(id='responsibilities', rows=8) }}
+            </div>
+
+            <div class="form-field">
+                <label for="qualifications">Qualifications (one per line)</label>
+                {{ form.qualifications(id='qualifications', rows=8) }}
+            </div>
+
+            <div class="form-check">
+                {{ form.is_active(id='is_active') }}
+                <label for="is_active">Accepting applications</label>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-check"></i> Save job posting
+                </button>
+                <a class="btn btn-ghost" href="{{ url_for('admin.jobs') }}">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

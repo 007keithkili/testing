@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ package.name }} | {{ site_settings.get('company_name', 'RemoteTravels') }}{% endblock %}
+{% block meta_description %}{{ package.tagline or package.description or package.name }}{% endblock %}
+{% block og_title %}{{ package.name }}{% endblock %}
+{% block og_description %}{{ package.tagline or package.description or '' }}{% endblock %}
+{% block canonical_url %}{{ site_url }}/packages/{{ package.slug }}{% endblock %}
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/packages.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="detail-hero">
+    <h1>{{ package.name }}</h1>
+    <p>{{ package.tagline or 'An all-inclusive experience designed for the discerning traveller.' }}</p>
+</section>
+
+<div class="container">
+    <div class="detail-grid">
+        <div>
+            {% if package.image_url %}
+            <img src="{{ package.image_url }}" alt="{{ package.name }}" style="width: 100%; border-radius: 18px; margin-bottom: 24px;">
+            {% endif %}
+            <div class="detail-body">
+                {% if package.description %}<p>{{ package.description }}</p>{% endif %}
+                {% if package.tags %}
+                <div class="package-tags">
+                    {% for tag in package.tags %}
+                    <span class="tag">{{ tag }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% if package.features %}
+                <h3>What is included</h3>
+                <ul class="feature-list">
+                    {% for feature in package.features %}
+                    <li><i class="fas fa-check"></i> {{ feature }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+        </div>
+
+        <aside class="detail-aside">
+            <div class="price">{{ package.price_display }} <span>/ person</span></div>
+            <div class="detail-meta">
+                <span><i class="fas fa-calendar-alt"></i> {{ package.duration }}</span>
+            </div>
+
+            <form method="POST" action="{{ url_for('main.booking') }}">
+                {{ form.hidden_tag() }}
+                <input type="hidden" name="item_type" value="package">
+                <input type="hidden" name="item_id" value="{{ package.id }}">
+                <input type="hidden" name="item_title" value="{{ package.name }}">
+                <div class="form-field">
+                    <label for="booking-name">Full name</label>
+                    {{ form.name(id='booking-name', placeholder='Your name') }}
+                    {% for error in form.name.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+                </div>
+                <div class="form-field">
+                    <label for="booking-email">Email</label>
+                    {{ form.email(id='booking-email', placeholder='you@example.com') }}
+                    {% for error in form.email.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+                </div>
+                <div class="form-field">
+                    <label for="booking-phone">Phone</label>
+                    {{ form.phone(id='booking-phone', placeholder='Optional') }}
+                </div>
+                <div class="form-field">
+                    <label for="booking-travellers">Travellers</label>
+                    {{ form.travellers(id='booking-travellers', min=1, max=50) }}
+                </div>
+                <div class="form-field">
+                    <label for="booking-date">Preferred travel date</label>
+                    {{ form.travel_date(id='booking-date') }}
+                </div>
+                <div class="form-field">
+                    <label for="booking-message">Message</label>
+                    {{ form.message(id='booking-message', rows=4, placeholder='Tell us what you have in mind') }}
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Request this package</button>
+                {% if payments_enabled and package.price_value %}
+                <button type="submit" name="action" value="pay" class="btn btn-primary w-100" style="margin-top: 10px;">
+                    <i class="fas fa-lock"></i> Pay now with Visa / Mastercard
+                </button>
+                <small style="display: block; margin-top: 8px; opacity: .8;">
+                    Secure checkout by Flutterwave.
+                    {% if deposit_percent < 100 %}You pay a {{ deposit_percent }}% deposit now.{% endif %}
+                    Price is charged in {{ payment_currency }} for the number of travellers above.
+                </small>
+                {% endif %}
+            </form>
+        </aside>
+    </div>
+</div>
+
+{% include 'partials/_newsletter.html' %}
+{% endblock %}

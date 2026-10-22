@@ -1,0 +1,33 @@
+<!-- Header -->
+<header>
+    <div class="header-container">
+        <a href="{{ url_for('main.index') }}" class="logo">
+            <div class="logo-icon">
+                <img src="{{ site_settings.get('logo_url', 'https://i.pinimg.com/736x/d2/3d/d8/d23dd8ad0a03ce25635349483c6e7130.jpg') }}"
+                     alt="{{ site_settings.get('company_name', 'RemoteTravels') }} Logo" id="logoImg">
+            </div>
+            <div class="logo-text">
+                <span>{{ site_settings.get('company_name', 'RemoteTravels') }}</span>
+                <span>{{ site_settings.get('tagline', 'Discover Extraordinary') }}</span>
+            </div>
+        </a>
+
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('main.index') }}" class="{{ 'active' if request.endpoint == 'main.index' }}">Home</a></li>
+                <li><a href="{{ url_for('main.destinations') }}" class="{{ 'active' if request.endpoint in ('main.destinations', 'main.destination_detail') }}">Destinations</a></li>
+                <li><a href="{{ url_for('main.packages') }}" class="{{ 'active' if request.endpoint in ('main.packages', 'main.package_detail') }}">Packages</a></li>
+                <li><a href="{{ url_for('main.careers') }}" class="{{ 'active' if request.endpoint in ('main.careers', 'main.job_detail') }}">Careers</a></li>
+                <li><a href="{{ url_for('main.about') }}" class="{{ 'active' if request.endpoint == 'main.about' }}">About</a></li>
+                <li><a href="{{ url_for('main.contacts') }}" class="{{ 'active' if request.endpoint == 'main.contacts' }}">Contact</a></li>
+            </ul>
+        </nav>
+
+        <div class="header-actions">
+            <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+                <i class="fas fa-moon" id="themeIcon"></i>
+            </button>
+            <a href="{{ url_for('main.contacts') }}" class="btn btn-primary">Book Now</a>
+        </div>
+    </div>
+</header>

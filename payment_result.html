@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Payment | {{ site_settings.get('company_name', 'RemoteTravels') }}{% endblock %}
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/index.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-content">
+        <div class="hero-text">
+            {% if outcome == 'success' %}
+            <h1>Payment received</h1>
+            <p>Thank you, {{ booking.name }}! We received {{ booking.amount }} {{ booking.currency }} for
+                <strong>{{ booking.item_title }}</strong>. A receipt is on its way to {{ booking.email }}, and our team
+                will contact you shortly to confirm your itinerary.</p>
+            <p>Reference: {{ booking.tx_ref }}</p>
+            {% elif outcome == 'pending' %}
+            <h1>We are confirming your payment</h1>
+            <p>Your payment is still being confirmed by the payment provider. You do not need to pay again.
+                We will email {{ booking.email }} as soon as it is confirmed.</p>
+            <p>Reference: {{ booking.tx_ref }}</p>
+            {% elif outcome == 'cancelled' %}
+            <h1>Payment cancelled</h1>
+            <p>No money was taken. You can go back and try again whenever you are ready, or contact us and we will help.</p>
+            {% else %}
+            <h1>Payment unsuccessful</h1>
+            <p>We could not complete your payment, and you have not been charged. Please try again or contact us
+                and quote reference {{ booking.tx_ref }}.</p>
+            {% endif %}
+            <div class="hero-btns">
+                <a href="{{ url_for('main.packages') }}" class="btn btn-primary">Browse Packages</a>
+                <a href="{{ url_for('main.contacts') }}" class="btn btn-outline" style="color: white; border-color: white;">Contact Us</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

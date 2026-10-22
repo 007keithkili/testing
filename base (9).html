@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{% block meta_description %}RemoteTravels offers extraordinary journeys, safari adventures, luxury tours, destination packages, and customized travel experiences across Africa and beyond.{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}RemoteTravels, remote travels, travel agency, safari tours, adventure travel, luxury travel, Kenya tours, Maasai Mara safari, Kilimanjaro trekking, Dubai tours{% endblock %}">
+    <meta name="author" content="{{ site_settings.get('company_name', 'RemoteTravels') }}">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="{% block canonical_url %}{{ site_url }}{% endblock %}">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="{% block og_title %}{{ site_settings.get('company_name', 'RemoteTravels') }} | Discover Extraordinary Journeys{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Explore safari adventures, luxury packages, and unforgettable travel experiences with RemoteTravels.{% endblock %}">
+    <meta property="og:url" content="{% block og_url %}{{ site_url }}{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}{{ site_settings.get('logo_url', '') }}{% endblock %}">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% block twitter_title %}{{ site_settings.get('company_name', 'RemoteTravels') }} | Discover Extraordinary Journeys{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}Explore safari adventures, luxury packages, and unforgettable travel experiences with RemoteTravels.{% endblock %}">
+    <meta name="twitter:image" content="{% block twitter_image %}{{ site_settings.get('logo_url', '') }}{% endblock %}">
+    <title>{% block title %}{{ site_settings.get('company_name', 'RemoteTravels') }} | Discover Extraordinary Journeys{% endblock %}</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;700;800&display=swap" rel="stylesheet">
+    {% block page_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/pages/index.css') }}">
+    {% endblock %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/site.css') }}">
+    {% block head_extra %}{% endblock %}
+</head>
+<body data-api-base="{{ api_base }}">
+    {% include 'partials/_header.html' %}
+
+    {% include 'partials/_flash.html' %}
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    {% include 'partials/_footer.html' %}
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

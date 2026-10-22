@@ -1,0 +1,28 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Flask / instance data
+instance/
+*.sqlite
+*.sqlite3
+*.db
+.env
+
+# Uploads
+app/static/uploads/
+uploads/
+
+# Deployment
+.DS_Store
+.idea/
+.vscode/
+*.log

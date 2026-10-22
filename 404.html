@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Page not found | {{ site_settings.get('company_name', 'RemoteTravels') }}{% endblock %}
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/index.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <div class="hero-content">
+        <div class="hero-text">
+            <h1>404</h1>
+            <p>We could not find the page you were looking for. The trail went cold, but the adventure is still out there.</p>
+            <div class="hero-btns">
+                <a href="{{ url_for('main.index') }}" class="btn btn-primary">Back Home</a>
+                <a href="{{ url_for('main.destinations') }}" class="btn btn-outline" style="color: white; border-color: white;">Explore Destinations</a>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

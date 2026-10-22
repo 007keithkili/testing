@@ -1,0 +1,56 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}Edit page{% endblock %}
+{% block crumb %}Legal pages{% endblock %}
+
+{% block content %}
+<div class="admin-page-header">
+    <div>
+        <h1>Edit {{ item.title }}</h1>
+        <p>Published at <code>/legal/{{ item.slug }}</code>. HTML is allowed in the content field.</p>
+    </div>
+    <div class="page-actions">
+        <a class="btn btn-outline" href="{{ url_for('main.legal', slug=item.slug) }}" target="_blank">
+            <i class="fas fa-eye"></i> Preview
+        </a>
+        <a class="btn" href="{{ url_for('admin.pages') }}">Back to list</a>
+    </div>
+</div>
+
+<div class="admin-card">
+    <div class="admin-card-body">
+        <form method="POST" class="admin-form">
+            {{ form.hidden_tag() }}
+
+            <div class="form-grid">
+                <div class="form-field">
+                    <label for="title">Title</label>
+                    {{ form.title(id='title') }}
+                    {% for error in form.title.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+                </div>
+                <div class="form-field">
+                    <label for="hero_title">Hero title</label>
+                    {{ form.hero_title(id='hero_title') }}
+                </div>
+                <div class="form-field">
+                    <label for="hero_subtitle">Hero subtitle</label>
+                    {{ form.hero_subtitle(id='hero_subtitle') }}
+                </div>
+            </div>
+
+            <div class="form-field">
+                <label for="content">Content (HTML allowed)</label>
+                {{ form.content(id='content', rows=24) }}
+                <span class="form-hint">Paragraphs, lists and headings are rendered as-is on the public page.</span>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-check"></i> Save page
+                </button>
+                <a class="btn btn-ghost" href="{{ url_for('admin.pages') }}">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ destination.name }} | {{ site_settings.get('company_name', 'RemoteTravels') }}{% endblock %}
+{% block meta_description %}{{ destination.description[:160] }}{% endblock %}
+{% block og_title %}{{ destination.name }}{% endblock %}
+{% block og_description %}{{ destination.description[:200] }}{% endblock %}
+{% block canonical_url %}{{ site_url }}/destinations/{{ destination.slug }}{% endblock %}
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/destinations.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="detail-hero">
+    <h1>{{ destination.name }}</h1>
+    <p>{{ destination.tag }}{% if destination.location %} · {{ destination.location }}{% endif %}</p>
+</section>
+
+<div class="container">
+    <div class="detail-grid">
+        <div>
+            {% if destination.image_url %}
+            <img src="{{ destination.image_url }}" alt="{{ destination.name }}" style="width: 100%; border-radius: 18px; margin-bottom: 24px;">
+            {% endif %}
+            <div class="detail-body">
+                <p>{{ destination.description }}</p>
+                {% if destination.highlights %}
+                <ul class="feature-list">
+                    {% for highlight in destination.highlights %}
+                    <li><i class="fas fa-check"></i> {{ highlight }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+
+            {% if similar %}
+            <h3 style="margin-top: 34px;">Similar Destinations</h3>
+            <div class="destinations-grid">
+                {% for other in similar %}
+                <div class="destination-card">
+                    <div class="destination-img">
+                        <img src="{{ other.image_url }}" alt="{{ other.name }}">
+                        <div class="destination-tag">{{ other.tag }}</div>
+                    </div>
+                    <div class="destination-content">
+                        <h3><a href="{{ url_for('main.destination_detail', slug=other.slug) }}">{{ other.name }}</a></h3>
+                        <div class="destination-meta">
+                            <div class="price">{{ other.price_display }} <span>/ person</span></div>
+                            <div><i class="fas fa-clock"></i> {{ other.duration }}</div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <aside class="detail-aside">
+            <div class="price">{{ destination.price_display }} <span>/ person</span></div>
+            <div class="detail-meta">
+                <span><i class="fas fa-clock"></i> {{ destination.duration }}</span>
+                {% if destination.location %}<span><i class="fas fa-map-marker-alt"></i> {{ destination.location }}</span>{% endif %}
+            </div>
+
+            <form method="POST" action="{{ url_for('main.booking') }}">
+                {{ form.hidden_tag() }}
+                <input type="hidden" name="item_type" value="destination">
+                <input type="hidden" name="item_id" value="{{ destination.id }}">
+                <input type="hidden" name="item_title" value="{{ destination.name }}">
+                <div class="form-field">
+                    <label for="booking-name">Full name</label>
+                    {{ form.name(id='booking-name', placeholder='Your name') }}
+                    {% for error in form.name.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+                </div>
+                <div class="form-field">
+                    <label for="booking-email">Email</label>
+                    {{ form.email(id='booking-email', placeholder='you@example.com') }}
+                    {% for error in form.email.errors %}<span class="field-error">{{ error }}</span>{% endfor %}
+                </div>
+                <div class="form-field">
+                    <label for="booking-phone">Phone</label>
+                    {{ form.phone(id='booking-phone', placeholder='Optional') }}
+                </div>
+                <div class="form-field">
+                    <label for="booking-travellers">Travellers</label>
+                    {{ form.travellers(id='booking-travellers', min=1, max=50) }}
+                </div>
+                <div class="form-field">
+                    <label for="booking-date">Preferred travel date</label>
+                    {{ form.travel_date(id='booking-date') }}
+                </div>
+                <div class="form-field">
+                    <label for="booking-message">Message</label>
+                    {{ form.message(id='booking-message', rows=4, placeholder='Tell us what you have in mind') }}
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Request this trip</button>
+                {% if payments_enabled and destination.price_value %}
+                <button type="submit" name="action" value="pay" class="btn btn-primary w-100" style="margin-top: 10px;">
+                    <i class="fas fa-lock"></i> Pay now with Visa / Mastercard
+                </button>
+                <small style="display: block; margin-top: 8px; opacity: .8;">
+                    Secure checkout by Flutterwave.
+                    {% if deposit_percent < 100 %}You pay a {{ deposit_percent }}% deposit now.{% endif %}
+                    Price is charged in {{ payment_currency }} for the number of travellers above.
+                </small>
+                {% endif %}
+            </form>
+        </aside>
+    </div>
+</div>
+
+{% include 'partials/_newsletter.html' %}
+{% endblock %}

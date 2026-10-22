@@ -1,0 +1,132 @@
+{% extends 'admin/base.html' %}
+
+{% block title %}Settings{% endblock %}
+{% block crumb %}Settings{% endblock %}
+
+{% block content %}
+<div class="admin-page-header">
+    <div>
+        <h1>Site settings</h1>
+        <p>These values feed the header, footer, contact details and social links across the whole website.</p>
+    </div>
+    <div class="page-actions">
+        <button type="submit" form="settings-form" class="btn btn-primary">
+            <i class="fas fa-check"></i> Save settings
+        </button>
+    </div>
+</div>
+
+<form method="POST" id="settings-form" class="admin-form">
+    {{ form.hidden_tag() }}
+
+    <div class="admin-card">
+        <div class="admin-card-head">
+            <h2><i class="fas fa-building"></i> Company</h2>
+        </div>
+        <div class="admin-card-body">
+            <div class="form-grid">
+                <div class="form-field">
+                    <label for="company_name">Company name</label>
+                    {{ form.company_name(id='company_name') }}
+                </div>
+                <div class="form-field">
+                    <label for="tagline">Tagline</label>
+                    {{ form.tagline(id='tagline') }}
+                </div>
+                <div class="form-field">
+                    <label for="logo_url">Logo URL</label>
+                    {{ form.logo_url(id='logo_url') }}
+                </div>
+                <div class="form-field">
+                    <label for="address">Address</label>
+                    {{ form.address(id='address') }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="admin-card">
+        <div class="admin-card-head">
+            <h2><i class="fas fa-phone"></i> Contact</h2>
+        </div>
+        <div class="admin-card-body">
+            <div class="form-grid">
+                <div class="form-field">
+                    <label for="phone">Phone</label>
+                    {{ form.phone(id='phone') }}
+                </div>
+                <div class="form-field">
+                    <label for="email">Email</label>
+                    {{ form.email(id='email') }}
+                </div>
+                <div class="form-field">
+                    <label for="whatsapp">WhatsApp number</label>
+                    {{ form.whatsapp(id='whatsapp', placeholder='254711697080') }}
+                </div>
+                <div class="form-field">
+                    <label for="hours">Opening hours</label>
+                    {{ form.hours(id='hours') }}
+                </div>
+                <div class="form-field">
+                    <label for="admin_email">Administrator email</label>
+                    {{ form.admin_email(id='admin_email') }}
+                    <span class="form-hint">New enquiries and bookings are notified here.</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="admin-card">
+        <div class="admin-card-head">
+            <h2><i class="fas fa-star"></i> Home page hero</h2>
+        </div>
+        <div class="admin-card-body">
+            <div class="form-field">
+                <label for="hero_title">Hero title</label>
+                {{ form.hero_title(id='hero_title') }}
+            </div>
+            <div class="form-field">
+                <label for="hero_subtitle">Hero subtitle</label>
+                {{ form.hero_subtitle(id='hero_subtitle') }}
+            </div>
+        </div>
+    </div>
+
+    <div class="admin-card">
+        <div class="admin-card-head">
+            <h2><i class="fas fa-share-nodes"></i> Social links</h2>
+        </div>
+        <div class="admin-card-body">
+            <div class="form-grid">
+                <div class="form-field">
+                    <label for="facebook">Facebook URL</label>
+                    {{ form.facebook(id='facebook') }}
+                </div>
+                <div class="form-field">
+                    <label for="twitter">Twitter/X URL</label>
+                    {{ form.twitter(id='twitter') }}
+                </div>
+                <div class="form-field">
+                    <label for="instagram">Instagram URL</label>
+                    {{ form.instagram(id='instagram') }}
+                </div>
+                <div class="form-field">
+                    <label for="youtube">YouTube URL</label>
+                    {{ form.youtube(id='youtube') }}
+                </div>
+                <div class="form-field">
+                    <label for="pinterest">Pinterest URL</label>
+                    {{ form.pinterest(id='pinterest') }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary">
+            <i class="fas fa-check"></i> Save settings
+        </button>
+        <a class="btn btn-ghost" href="{{ url_for('admin.dashboard') }}">Cancel</a>
+    </div>
+</form>
+{% endblock %}

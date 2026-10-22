@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% set legal_stylesheets = {'privacy': 'privacy', 'terms': 'terms', 'cancellation': 'cancellation'} %}
+
+{% block title %}{{ page.title }} | {{ site_settings.get('company_name', 'RemoteTravels') }}{% endblock %}
+{% block meta_description %}{{ page.hero_subtitle or page.title }}{% endblock %}
+{% block og_title %}{{ page.title }}{% endblock %}
+{% block og_description %}{{ page.hero_subtitle or '' }}{% endblock %}
+{% block canonical_url %}{{ site_url }}/legal/{{ page.slug }}{% endblock %}
+{% block page_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/pages/' ~ legal_stylesheets.get(page.slug, 'privacy') ~ '.css') }}">
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-content">
+        <div class="hero-text">
+            <h1>{{ page.hero_title or page.title }}</h1>
+            <p>{{ page.hero_subtitle or 'Review our policies for a smooth and informed travel experience' }}</p>
+            <div class="hero-btns">
+                <a href="{{ url_for('main.packages') }}" class="btn btn-primary">Explore packages</a>
+                <a href="{{ url_for('main.contacts') }}" class="btn btn-outline" style="color: white; border-color: white;">Customize Your Tour</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <div class="policy">
+        {{ page.content|safe }}
+    </div>
+</div>
+
+{% include 'partials/_newsletter.html' %}
+{% endblock %}
